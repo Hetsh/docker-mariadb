@@ -20,21 +20,27 @@ if ! docker version &> /dev/null; then
 fi
 
 # Build the image
-APP_NAME="geth"
+APP_NAME="mariadb"
 IMG_NAME="hetsh/$APP_NAME"
 docker build --tag "$IMG_NAME:latest" --tag "$IMG_NAME:$_NEXT_VERSION" .
 
 case "${1-}" in
-	# Test with default configuration
+	# Test with temporary database
 	"--test")
+		# Bootstrap DB in temporary directory
+		assert_dependency "mariadb-install-db"
+		TMP_DIR=$(mktemp -d "/$APP_NAME-XXXXXXXXXX")
+		add_cleanup "rm -rf $TMP_DIR"
+		mariadb-install-db --datadir="$TMP_DIR"
+		extract_var APP_UID "./Dockerfile" "\d+"
+		chown -R "$APP_UID" "$TMP_DIR"
+
 		docker run \
 		--rm \
 		--tty \
 		--interactive \
-		--publish 8545:8545/tcp \
-		--publish 8546:8546/tcp \
-		--publish 30303:30303/tcp \
-		--publish 30303:30303/udp \
+		--publish 3306:3306/tcp \
+		--mount type=bind,source="$TMP_DIR",target=/var/lib/mysql \
 		--mount type=bind,source=/etc/localtime,target=/etc/localtime,readonly \
 		--name "$APP_NAME" \
 		"$IMG_NAME"
