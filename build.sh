@@ -27,14 +27,19 @@ docker build --tag "$IMG_NAME:latest" --tag "$IMG_NAME:$_NEXT_VERSION" .
 case "${1-}" in
 	# Test with temporary database
 	"--test")
-		# Bootstrap DB in temporary directory
-		assert_dependency "mariadb-install-db"
+		# Create temporary directory
 		TMP_DIR=$(mktemp -d "/$APP_NAME-XXXXXXXXXX")
 		add_cleanup "rm -rf $TMP_DIR"
+
+		# Bootstrap DB
+		assert_dependency "mariadb-install-db"
 		mariadb-install-db --datadir="$TMP_DIR"
+
+		# Apply permissions
 		extract_var APP_UID "./Dockerfile" "\d+"
 		chown -R "$APP_UID" "$TMP_DIR"
 
+		# Start test
 		docker run \
 		--rm \
 		--tty \
