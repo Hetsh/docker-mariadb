@@ -18,7 +18,7 @@ RUN mkdir "$SOCK_DIR" && \
     chown "$APP_USER":"$APP_GROUP" "$SOCK_DIR" "$DATA_DIR"
 VOLUME ["$SOCK_DIR", "$DATA_DIR"]
 
-#      Classic
+#      MySQL
 EXPOSE 3306/tcp
 
 USER "$APP_USER"
