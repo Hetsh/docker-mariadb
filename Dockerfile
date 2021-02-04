@@ -14,7 +14,8 @@ RUN sed -i "s|$APP_USER:x:[0-9]\+:[0-9]\+|$APP_USER:x:$APP_UID:$APP_GID|" /etc/p
 ARG SOCK_DIR="/run/mysqld"
 ARG DATA_DIR="/var/lib/mysql"
 RUN mkdir "$SOCK_DIR" && \
-    sed -i '/skip-networking/d' /etc/my.cnf.d/mariadb-server.cnf && \
+    rm -r /etc/my.cnf.d && \
+    sed -i 's|!includedir /etc/my.cnf.d|#!includedir /etc/my.cnf.d|' /etc/my.cnf && \
     chown "$APP_USER":"$APP_GROUP" "$SOCK_DIR" "$DATA_DIR"
 VOLUME ["$SOCK_DIR", "$DATA_DIR"]
 
