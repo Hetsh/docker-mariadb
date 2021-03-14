@@ -28,7 +28,7 @@ case "${1-}" in
 	# Test with temporary database
 	"--test")
 		# Create temporary directory
-		TMP_DIR=$(mktemp -d "/$APP_NAME-XXXXXXXXXX")
+		TMP_DIR=$(mktemp -d "/tmp/$APP_NAME-XXXXXXXXXX")
 		add_cleanup "rm -rf $TMP_DIR"
 
 		# Bootstrap DB
