@@ -1,6 +1,6 @@
 FROM library/alpine:20210212
 RUN apk add --no-cache \
-        mariadb=10.5.11-r1
+        mariadb=10.6.3-r0
 
 # App user
 ARG APP_USER="mysql"
