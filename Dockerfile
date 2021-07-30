@@ -1,4 +1,4 @@
-FROM library/alpine:20210212
+FROM library/alpine:20210730
 RUN apk add --no-cache \
         mariadb=10.6.3-r0
 
