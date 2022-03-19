@@ -1,6 +1,6 @@
-FROM amd64/alpine:20210804
+FROM amd64/alpine:20220316
 RUN apk add --no-cache \
-        mariadb=10.6.4-r2
+        mariadb=10.6.7-r0
 
 # App user
 ARG APP_USER="mysql"
